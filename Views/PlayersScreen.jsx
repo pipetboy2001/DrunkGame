@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, Platform, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 const PlayersScreen = () => {
     const [playerName, setPlayerName] = useState('');
     const [players, setPlayers] = useState([]);
     const isDesktop = Platform.OS === 'web' && Dimensions.get('window').width > 768;
+
+    const navigation = useNavigation();
+
+    // Función para navegar a la pantalla de juegos y pasar los jugadores como parámetro
+    const goToGamesScreen = () => {
+        //mostrar los jugadores que hay
+        console.log("Selected players:", players);
+        navigation.navigate('Games', { players });
+    };
 
     useEffect(() => {
         const loadPlayers = async () => {
@@ -36,7 +46,7 @@ const PlayersScreen = () => {
         newPlayers.splice(index, 1);
         setPlayers(newPlayers);
         AsyncStorage.setItem('players', JSON.stringify(newPlayers));
-    };
+    }; 
 
     return (
         <View style={[styles.container, isDesktop && styles.containerDesktop]}>
@@ -59,7 +69,12 @@ const PlayersScreen = () => {
                 </Pressable>
             </View>
 
-            <ScrollView style={[styles.playersList, !isDesktop && styles.playersListMobile]}>
+            <ScrollView 
+                style={[styles.playersList, !isDesktop && styles.playersListMobile]}
+                contentContainerStyle={styles.playersContent}
+                // Añadimos scrollIndicatorInsets solo para desktop
+                scrollIndicatorInsets={{ right: 5 }}
+            >
                 {players.map((player, index) => (
                     <View key={index} style={styles.playerItem}>
                         <Text style={styles.playerText}>{player}</Text>
@@ -68,9 +83,10 @@ const PlayersScreen = () => {
                         </Pressable>
                     </View>
                 ))}
+                
             </ScrollView>
 
-            <Pressable style={styles.playButton}>
+            <Pressable style={styles.playButton} onPress={goToGamesScreen}>
                 <Text style={styles.buttonText}>Jugar!</Text>
             </Pressable>
 
@@ -93,19 +109,26 @@ const styles = StyleSheet.create({
         backgroundColor: '#f0f0f0',
     },
     containerDesktop: {
-        width: '70%',
-        maxWidth: 800,
         borderRadius: 20,
         padding: 20,
         margin: 20,
+        alignItems: 'center', // Centrar horizontalmente
+        justifyContent: 'center', // Centrar verticalmente
+        paddingHorizontal: 20, // Ajustar el espaciado horizontal
+        margin: 20,
+        alignItems: 'center', // Centrar horizontalmente
+        justifyContent: 'center', // Centrar verticalmente
     },
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
+        justifyContent: 'center',
+        
     },
     titleBox: {
         marginLeft: 10,
+        alignItems: 'center',
     },
     titleEmoji: {
         fontSize: 24,
@@ -138,6 +161,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+
     },
     addButton: {
         backgroundColor: '#4ecdc4',
@@ -158,12 +182,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     playersList: {
-        width: '100%',
+        height: '60vh', // Establecemos una altura fija para desktop
+        overflowY: 'auto', // Habilitamos el desplazamiento vertical
+        width: '90%',
         flex: 1,
         marginBottom: 20,
         backgroundColor: 'green',
         borderRadius: 10,
         padding: 10,
+
     },
     playersListMobile: {
         maxHeight: '40%', // Ajusta este valor según sea necesario
