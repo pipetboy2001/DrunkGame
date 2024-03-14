@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { useState } from 'react';
 import { Modal, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Importar los iconos de Ionicons
+import GameTitle from './../Components/GameTitle';
+
+const backgroundImg = require('./../assets/Simple Blue.png');
 
 const GamesScreen = ({ navigation }) => {
     const route = useRoute();
@@ -26,133 +29,67 @@ const GamesScreen = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <ImageBackground source={backgroundImg} style={styles.background}>
+            <View style={styles.container}>
+                <GameTitle message="Juguemos a" />
 
-            <View style={styles.backButton}>
-                <Pressable onPress={() => navigation.goBack()}>
-                    <Ionicons name="arrow-back" size={24} color="black" />
-                </Pressable>
-            </View>
-
-
-            <Pressable style={styles.toggleButton} onPress={handleTogglePlayersPress}>
-                <Text style={styles.toggleButtonText}>Mostrar participantes</Text>
-                <Ionicons name="people" size={24} color="#4ecdc4" />
-            </Pressable>
-
-
-            <View style={styles.gameContainer}>
-    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego1')}>
-        <Text style={styles.buttonText}>Juego 1</Text>
-    </Pressable>
-    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego2')}>
-        <Text style={styles.buttonText}>Juego 2</Text>
-    </Pressable>
-    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego3')}>
-        <Text style={styles.buttonText}>Juego 3</Text>
-    </Pressable>
-    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego4')}>
-        <Text style={styles.buttonText}>Juego 4</Text>
-    </Pressable>
-</View>
-
-            <Modal visible={showPlayers} transparent={true} animationType="slide">
-                <View style={styles.modalContainer}>
-                    <ScrollView style={styles.modalContent}>
-                        {players.map((player, index) => (
-                            <Text key={index} style={styles.modalPlayer}>{player}</Text>
-                        ))}
-                        <Text style={styles.modalPlayerSecond}>Añade o elimina participantes desde la pantalla anterior</Text>
-                    </ScrollView>
-                    <Pressable style={styles.closeButton} onPress={handleCloseModal}>
-                        <Text style={styles.closeButtonText}>Cerrar</Text>
+                <View style={styles.backButton}>
+                    <Pressable onPress={() => navigation.goBack()}>
+                        <Ionicons name="arrow-back" size={24} color="white" />
                     </Pressable>
                 </View>
-            </Modal>
-        </View>
+
+                <Pressable style={styles.toggleButton} onPress={handleTogglePlayersPress}>
+                    <Text style={styles.toggleButtonText}>Mostrar participantes</Text>
+                    <Ionicons name="people" size={24} color="#4ecdc4" />
+                </Pressable>
+
+                <View style={[styles.gameContainer, { backgroundColor: '#12375c' }]}>
+                    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego1')}>
+                        <Text style={styles.buttonText}>Juego 1</Text>
+                    </Pressable>
+                    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego2')}>
+                        <Text style={styles.buttonText}>Juego 2</Text>
+                    </Pressable>
+                    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego3')}>
+                        <Text style={styles.buttonText}>Juego 3</Text>
+                    </Pressable>
+                    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego4')}>
+                        <Text style={styles.buttonText}>Juego 4</Text>
+                    </Pressable>
+                </View>
+
+                <Modal visible={showPlayers} transparent={true} animationType="slide">
+                    <View style={styles.modalContainer}>
+                        <ScrollView style={styles.modalContent}>
+                            {players.map((player, index) => (
+                                <Text key={index} style={styles.modalPlayer}>{player}</Text>
+                            ))}
+                            <Text style={styles.modalPlayerSecond}>Añade o elimina participantes desde la pantalla anterior</Text>
+                        </ScrollView>
+                        <Pressable style={styles.closeButton} onPress={handleCloseModal}>
+                            <Text style={styles.closeButtonText}>Cerrar</Text>
+                        </Pressable>
+                    </View>
+                </Modal>
+            </View>
+        </ImageBackground>
     );
 };
 
 const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
+    background: {
+        flex: 1,
+        resizeMode: 'cover',
+        justifyContent: 'center',
+    },
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 20,
-        backgroundColor: '#f0f0f0',
-    },
-    toggleButton: {
-        position: 'absolute',
-        top: 20,
-        right: 20,
-        flexDirection: 'row', // Para alinear el icono con el texto
-        alignItems: 'center', // Para alinear el icono con el texto
-    },
-    toggleButtonText: {
-        marginRight: 5, // Espaciado entre el texto y el icono
-    },
-    gameSelection: {
-        marginTop: 30,
-        justifyContent: 'center', // Alinear los botones verticalmente
-        width: '90%', // Ancho total de la pantalla
-    },
-    gameButton: {
-        backgroundColor: '#4ecdc4',
-        paddingHorizontal: 20,
-        paddingVertical: 30, // Ajustar el tamaño verticalmente
-        borderRadius: 10,
-        marginVertical: 10, // Espacio entre botones
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: 'bold',
-        textAlign: 'center', // Centrar texto horizontalmente
-    },
-    modalContainer: {
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo oscuro con opacidad
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    modalContent: {
-        width: '80%',
-        backgroundColor: 'black', // Fondo negro
-        borderRadius: 10,
-        padding: 20,
-        maxHeight: '80%', // Altura máxima del modal
-    },
-    modalPlayer: {
-        color: 'white', // Texto blanco
-        marginBottom: 10,
-        textAlign: 'center', // Centrar el texto horizontalmente
-        alignSelf: 'center', // Centrar el componente horizontalmente
-    },
-    modalPlayerSecond: {
-        color: 'gray',
-        marginBottom: 10,
-        textAlign: 'center', // Centrar el texto horizontalmente
-        alignSelf: 'center', // Centrar el componente horizontalmente
-    },
-    closeButton: {
-        backgroundColor: '#4ecdc4',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderRadius: 10,
-        marginTop: 20,
-    },
-    closeButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
     },
     backButton: {
         position: 'absolute',
@@ -166,14 +103,74 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
+    toggleButtonText: {
+        marginRight: 5,
+        color: '#fff',
+        fontWeight: 'bold',
+    },
     gameContainer: {
         backgroundColor: '#262335',
         borderRadius: 10,
         padding: 10,
         marginVertical: 20,
-        width: '80%', // Ajuste del ancho al 80% de la pantalla
+        width: '80%',
     },
-    
+    gameButton: {
+        backgroundColor: '#4ecdc4',
+        paddingHorizontal: 20,
+        paddingVertical: 30,
+        borderRadius: 10,
+        marginVertical: 10,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        width: '80%',
+        backgroundColor: 'black',
+        borderRadius: 10,
+        padding: 20,
+        maxHeight: '80%',
+    },
+    modalPlayer: {
+        color: 'white',
+        marginBottom: 10,
+        textAlign: 'center',
+        alignSelf: 'center',
+    },
+    modalPlayerSecond: {
+        color: 'gray',
+        marginBottom: 10,
+        textAlign: 'center',
+        alignSelf: 'center',
+    },
+    closeButton: {
+        backgroundColor: '#4ecdc4',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginTop: 20,
+    },
+    closeButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
 });
 
 export default GamesScreen;
