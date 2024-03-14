@@ -64,7 +64,7 @@ const PlayersScreen = () => {
                         <Footer /> 
                     </View>
                 </View>
-                <View style={styles.blueContainer}>
+                <View style={[styles.blueContainer, isDesktop && { width: '60%' }]}>
                     <View style={styles.inputContainer}>
                         <MaterialIcons name="person" size={24} color="#4ecdc4" style={styles.icon} />
                         <TextInput
@@ -170,6 +170,8 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     blueContainer: {
+        width: '100%',
+        alignSelf: 'center',
         backgroundColor: '#12375c',
         borderRadius: 10,
         padding: 10, // Reducir el espacio interno
