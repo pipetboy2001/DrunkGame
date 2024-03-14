@@ -1,18 +1,23 @@
+// PlayersScreen.js
+
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, Platform, Dimensions } from 'react-native';
+import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, ImageBackground,Platform,Dimensions  } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons'; // Importa el icono de MaterialIcons
+import Footer from '../Components/Footer';
+
+const backgroundImg = require('./../assets/Simple Blue.png');
+
+const isDesktop = Platform.OS === 'web' && Dimensions.get('window').width > 768;
 
 const PlayersScreen = () => {
     const [playerName, setPlayerName] = useState('');
     const [players, setPlayers] = useState([]);
-    const isDesktop = Platform.OS === 'web' && Dimensions.get('window').width > 768;
 
     const navigation = useNavigation();
 
-    // Función para navegar a la pantalla de juegos y pasar los jugadores como parámetro
     const goToGamesScreen = () => {
-        //mostrar los jugadores que hay
         console.log("Selected players:", players);
         navigation.navigate('Games', { players });
     };
@@ -46,99 +51,87 @@ const PlayersScreen = () => {
         newPlayers.splice(index, 1);
         setPlayers(newPlayers);
         AsyncStorage.setItem('players', JSON.stringify(newPlayers));
-    }; 
+    };
 
     return (
-        <View style={[styles.container, isDesktop && styles.containerDesktop]}>
-            <View style={styles.titleContainer}>
-                <Text style={styles.titleEmoji}>🍹</Text>
-                <View style={styles.titleBox}>
-                    <Text style={styles.title}>Bienvenidos a</Text>
-                    <Text style={[styles.title, styles.gameTitle]}>DrunkGame</Text>
+        <ImageBackground source={backgroundImg} style={styles.background}>
+            <View style={styles.container}>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.titleEmoji}>🍹</Text>
+                    <View style={styles.titleBox}>
+                        <Text style={styles.title}>Bienvenidos a</Text>
+                        <Text style={[styles.title, styles.gameTitle]}>DrunkGame</Text>
+                        <Footer /> 
+                    </View>
                 </View>
-            </View>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Añadir a los jugadores"
-                    value={playerName}
-                    onChangeText={(text) => setPlayerName(text)}
-                />
-                <Pressable style={styles.addButton} onPress={addPlayer}>
-                    <Text style={styles.buttonText}>+</Text>
-                </Pressable>
-            </View>
-
-            <ScrollView 
-                style={[styles.playersList, !isDesktop && styles.playersListMobile]}
-                contentContainerStyle={styles.playersContent}
-                // Añadimos scrollIndicatorInsets solo para desktop
-                scrollIndicatorInsets={{ right: 5 }}
-            >
-                {players.map((player, index) => (
-                    <View key={index} style={styles.playerItem}>
-                        <Text style={styles.playerText}>{player}</Text>
-                        <Pressable onPress={() => removePlayer(index)}>
-                            <Text style={styles.removeButton}>X</Text>
+                <View style={styles.blueContainer}>
+                    <View style={styles.inputContainer}>
+                        <MaterialIcons name="person" size={24} color="#4ecdc4" style={styles.icon} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Añadir a los jugadores"
+                            value={playerName}
+                            onChangeText={(text) => setPlayerName(text)}
+                        />
+                        <Pressable style={styles.addButton} onPress={addPlayer}>
+                            <Text style={styles.buttonText}>+</Text>
                         </Pressable>
                     </View>
-                ))}
+                    <ScrollView style={styles.playersListContainer}>
+                        {players.map((player, index) => (
+                            <View key={index} style={styles.playerItem}>
+                                <Text style={styles.playerText}>{player}</Text>
+                                <Pressable onPress={() => removePlayer(index)}>
+                                    <Text style={styles.removeButton}>X</Text>
+                                </Pressable>
+                            </View>
+                        ))}
+                    </ScrollView>
+                    <Pressable style={styles.playButton} onPress={goToGamesScreen}>
+                        <Text style={styles.playButtonText}>¡Jugar!</Text>
+                    </Pressable>
+                </View>
                 
-            </ScrollView>
-
-            <Pressable style={styles.playButton} onPress={goToGamesScreen}>
-                <Text style={styles.buttonText}>Jugar!</Text>
-            </Pressable>
-
-            <View style={styles.creatorContainer}>
-                <Text style={styles.creatorText}>Creado por Pipetboy</Text>
+           
             </View>
-
-        </View>
-
-
+        </ImageBackground>
     );
 };
 
 const styles = StyleSheet.create({
+    background: {
+        flex: 1,
+        resizeMode: 'cover',
+        justifyContent: 'center',
+        
+    },
     container: {
         flex: 1,
-        alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 20,
-        backgroundColor: '#f0f0f0',
-    },
-    containerDesktop: {
-        borderRadius: 20,
-        padding: 20,
-        margin: 20,
-        alignItems: 'center', // Centrar horizontalmente
-        justifyContent: 'center', // Centrar verticalmente
-        paddingHorizontal: 20, // Ajustar el espaciado horizontal
-        margin: 20,
-        alignItems: 'center', // Centrar horizontalmente
-        justifyContent: 'center', // Centrar verticalmente
     },
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 20,
         justifyContent: 'center',
-        
     },
     titleBox: {
         marginLeft: 10,
         alignItems: 'center',
     },
     titleEmoji: {
-        fontSize: 24,
+        fontSize: 50,
     },
     title: {
-        fontSize: 24,
+        
+        fontSize: 15,
         fontWeight: 'bold',
+        color: '#fff',
     },
     gameTitle: {
-        color: 'green',
+        fontSize: 25,
+        color: '#f3c623',
     },
     inputContainer: {
         flexDirection: 'row',
@@ -147,27 +140,41 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
+        height: 40,
         borderWidth: 1,
         borderColor: '#4ecdc4',
         borderRadius: 10,
         paddingHorizontal: 10,
         marginRight: 10,
-        backgroundColor: 'white',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-
+        backgroundColor: '#fff',
     },
     addButton: {
         backgroundColor: '#4ecdc4',
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    playersListContainer: {
+        height: 250,
+        marginBottom: 20,
+        borderRadius: 10,
+        overflow: 'hidden',
+        backgroundColor: '#2064a8', 
+    },
+    playersList: {
+        flex: 1,
+        padding: 10,
+    },
+    blueContainer: {
+        backgroundColor: '#12375c',
+        borderRadius: 10,
+        padding: 10, // Reducir el espacio interno
+        marginHorizontal: 10,
+        marginBottom: 20,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -176,24 +183,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-    playersList: {
-        height: '60vh', // Establecemos una altura fija para desktop
-        overflowY: 'auto', // Habilitamos el desplazamiento vertical
-        width: '90%',
-        flex: 1,
-        marginBottom: 20,
-        backgroundColor: 'green',
-        borderRadius: 10,
-        padding: 10,
-
-    },
-    playersListMobile: {
-        maxHeight: '40%', // Ajusta este valor según sea necesario
     },
     playerItem: {
         flexDirection: 'row',
@@ -205,7 +194,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 5,
         marginBottom: 5,
-        backgroundColor: 'white',
+        backgroundColor: '#fff',
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -225,7 +214,7 @@ const styles = StyleSheet.create({
     playButton: {
         backgroundColor: '#4ecdc4',
         paddingHorizontal: 20,
-        paddingVertical: 10,
+        paddingVertical: 15, 
         borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: {
@@ -235,19 +224,15 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        justifyContent: 'center', 
+        alignItems: 'center', 
     },
 
-    creatorContainer: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        margin: 20,
+    playButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        textAlign: 'center', 
     },
-    creatorText: {
-        fontSize: 12,
-        color: 'gray',
-    },
-
 });
 
 export default PlayersScreen;
