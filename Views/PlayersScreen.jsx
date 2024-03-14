@@ -5,7 +5,7 @@ import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, ImageBackgrou
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons'; // Importa el icono de MaterialIcons
-import Footer from '../Components/Footer';
+import GameTitle from '../Components/GameTitle';
 
 const backgroundImg = require('./../assets/Simple Blue.png');
 
@@ -56,14 +56,7 @@ const PlayersScreen = () => {
     return (
         <ImageBackground source={backgroundImg} style={styles.background}>
             <View style={styles.container}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.titleEmoji}>🍹</Text>
-                    <View style={styles.titleBox}>
-                        <Text style={styles.title}>Bienvenidos a</Text>
-                        <Text style={[styles.title, styles.gameTitle]}>DrunkGame</Text>
-                        <Footer /> 
-                    </View>
-                </View>
+            <GameTitle message="Bienvenidos a" /> 
                 <View style={[styles.blueContainer, isDesktop && { width: '60%' }]}>
                     <View style={styles.inputContainer}>
                         <MaterialIcons name="person" size={24} color="#4ecdc4" style={styles.icon} />
