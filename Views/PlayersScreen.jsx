@@ -1,10 +1,8 @@
-// PlayersScreen.js
-
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, ImageBackground,Platform,Dimensions  } from 'react-native';
+import { View, Text, TextInput, Pressable, ScrollView, StyleSheet, ImageBackground, Platform, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import { MaterialIcons } from '@expo/vector-icons'; // Importa el icono de MaterialIcons
+import { MaterialIcons } from '@expo/vector-icons';
 import GameTitle from '../Components/GameTitle';
 
 const backgroundImg = require('./../assets/Simple Blue.png');
@@ -14,7 +12,6 @@ const isDesktop = Platform.OS === 'web' && Dimensions.get('window').width > 768;
 const PlayersScreen = () => {
     const [playerName, setPlayerName] = useState('');
     const [players, setPlayers] = useState([]);
-
     const navigation = useNavigation();
 
     const goToGamesScreen = () => {
@@ -33,7 +30,6 @@ const PlayersScreen = () => {
                 console.error('Error loading players from AsyncStorage:', error);
             }
         };
-
         loadPlayers();
     }, []);
 
@@ -56,7 +52,7 @@ const PlayersScreen = () => {
     return (
         <ImageBackground source={backgroundImg} style={styles.background}>
             <View style={styles.container}>
-            <GameTitle message="Bienvenidos a" /> 
+                <GameTitle message="Bienvenidos a" />
                 <View style={[styles.blueContainer, isDesktop && { width: '60%' }]}>
                     <View style={styles.inputContainer}>
                         <MaterialIcons name="person" size={24} color="#4ecdc4" style={styles.icon} />
@@ -84,8 +80,6 @@ const PlayersScreen = () => {
                         <Text style={styles.playButtonText}>¡Jugar!</Text>
                     </Pressable>
                 </View>
-                
-           
             </View>
         </ImageBackground>
     );
@@ -96,35 +90,28 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: 'cover',
         justifyContent: 'center',
-        
     },
     container: {
         flex: 1,
         justifyContent: 'center',
         paddingHorizontal: 20,
     },
-    titleContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    blueContainer: {
+        width: '100%',
+        alignSelf: 'center',
+        backgroundColor: '#12375c',
+        borderRadius: 10,
+        padding: 10,
+        marginHorizontal: 10,
         marginBottom: 20,
-        justifyContent: 'center',
-    },
-    titleBox: {
-        marginLeft: 10,
-        alignItems: 'center',
-    },
-    titleEmoji: {
-        fontSize: 50,
-    },
-    title: {
-        
-        fontSize: 15,
-        fontWeight: 'bold',
-        color: '#fff',
-    },
-    gameTitle: {
-        fontSize: 25,
-        color: '#f3c623',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     inputContainer: {
         flexDirection: 'row',
@@ -156,28 +143,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderRadius: 10,
         overflow: 'hidden',
-        backgroundColor: '#2064a8', 
-    },
-    playersList: {
-        flex: 1,
-        padding: 10,
-    },
-    blueContainer: {
-        width: '100%',
-        alignSelf: 'center',
-        backgroundColor: '#12375c',
-        borderRadius: 10,
-        padding: 10, // Reducir el espacio interno
-        marginHorizontal: 10,
-        marginBottom: 20,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+        backgroundColor: '#2064a8',
     },
     playerItem: {
         flexDirection: 'row',
@@ -209,7 +175,7 @@ const styles = StyleSheet.create({
     playButton: {
         backgroundColor: '#4ecdc4',
         paddingHorizontal: 20,
-        paddingVertical: 15, 
+        paddingVertical: 15,
         borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: {
@@ -219,14 +185,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        justifyContent: 'center', 
-        alignItems: 'center', 
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-
     playButtonText: {
         color: '#fff',
         fontWeight: 'bold',
-        textAlign: 'center', 
+        textAlign: 'center',
     },
 });
 
