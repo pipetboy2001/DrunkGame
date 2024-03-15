@@ -17,7 +17,12 @@ const GamesScreen = ({ navigation }) => {
 
     const handleGameSelection = (game) => {
         console.log(`Juego seleccionado: ${game}`);
+        navigation.navigate('QuestionScreen', { 
+            category: game, 
+            players: players 
+        });
     };
+    
 
     const handleTogglePlayersPress = () => {
         console.log('Participantes:', players);
@@ -46,16 +51,16 @@ const GamesScreen = ({ navigation }) => {
 
                 <View style={[styles.gameContainer, { backgroundColor: '#12375c' }]}>
                     <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego1')}>
-                        <Text style={styles.buttonText}>Juego 1</Text>
+                        <Text style={styles.buttonText}>Tomanji</Text>
                     </Pressable>
                     <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego2')}>
-                        <Text style={styles.buttonText}>Juego 2</Text>
+                        <Text style={styles.buttonText}>¿Que prefiere?</Text>
                     </Pressable>
-                    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego3')}>
-                        <Text style={styles.buttonText}>Juego 3</Text>
+                    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego3')} disabled>
+                        <Text style={styles.buttonText}>????</Text>
                     </Pressable>
-                    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego4')}>
-                        <Text style={styles.buttonText}>Juego 4</Text>
+                    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego4')} disabled>
+                        <Text style={styles.buttonText}>?????</Text>
                     </Pressable>
                 </View>
 
