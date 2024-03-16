@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, Dimensions, ImageBackground } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import { useState } from 'react';
 import { Modal, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Importar los iconos de Ionicons
+import { Ionicons } from '@expo/vector-icons';
 import GameTitle from './../Components/GameTitle';
+import PlayersModal from './../Components/PlayersModal'; // Importa el componente PlayersModal
+
 
 const backgroundImg = require('./../assets/Simple Blue.png');
 
@@ -12,8 +13,7 @@ const GamesScreen = ({ navigation }) => {
     const route = useRoute();
 
     const { players } = route.params;
-    const showPlayersModal = route.params?.showPlayersModal;
-    const [showPlayers, setShowPlayers] = useState(false);
+    const [showPlayersModal, setShowPlayersModal] = useState(false);
 
     const handleGameSelection = (game) => {
         console.log(`Juego seleccionado: ${game}`);
@@ -22,15 +22,9 @@ const GamesScreen = ({ navigation }) => {
             players: players 
         });
     };
-    
 
     const handleTogglePlayersPress = () => {
-        console.log('Participantes:', players);
-        setShowPlayers(!showPlayers);
-    };
-
-    const handleCloseModal = () => {
-        setShowPlayers(false);
+        setShowPlayersModal(!showPlayersModal);
     };
 
     return (
@@ -51,36 +45,29 @@ const GamesScreen = ({ navigation }) => {
 
                 <View style={[styles.gameContainer, { backgroundColor: '#12375c' }]}>
                 <Pressable style={[styles.gameButton, { backgroundColor: '#f37121' }]} onPress={() => handleGameSelection('Tomanji')}>
-                        <Text style={[styles.buttonText, { fontSize: 18 }]}>Tomanji 🎲</Text>
+                        <Text style={[styles.buttonText, { fontSize: 16 }]}>Tomanji 🎲</Text>
                     </Pressable>
                     <Pressable style={[styles.gameButton, { backgroundColor: '#f8961e' }]} onPress={() => handleGameSelection('¿Qué prefiere?')}>
-                        <Text style={[styles.buttonText, { fontSize: 18 }]}>¿Qué prefiere? 🤔</Text>
+                        <Text style={[styles.buttonText, { fontSize: 16 }]}>¿Qué prefiere? 🤔</Text>
                     </Pressable>
                     <Pressable style={[styles.gameButton, styles.disabledButton]} disabled>
-                        <Text style={[styles.buttonText, { fontSize: 18 }]}>????</Text>
+                        <Text style={[styles.buttonText, { fontSize: 16 }]}>????</Text>
                     </Pressable>
                     <Pressable style={[styles.gameButton, styles.disabledButton]} disabled>
-                        <Text style={[styles.buttonText, { fontSize: 18 }]}>?????</Text>
+                        <Text style={[styles.buttonText, { fontSize: 16 }]}>?????</Text>
                     </Pressable>
                 </View>
 
-                <Modal visible={showPlayers} transparent={true} animationType="slide">
-                    <View style={styles.modalContainer}>
-                        <ScrollView style={styles.modalContent}>
-                            {players.map((player, index) => (
-                                <Text key={index} style={styles.modalPlayer}>{player}</Text>
-                            ))}
-                            <Text style={styles.modalPlayerSecond}>Añade o elimina participantes desde la pantalla anterior</Text>
-                        </ScrollView>
-                        <Pressable style={styles.closeButton} onPress={handleCloseModal}>
-                            <Text style={styles.closeButtonText}>Cerrar</Text>
-                        </Pressable>
-                    </View>
-                </Modal>
+                <PlayersModal
+                    visible={showPlayersModal}
+                    players={players}
+                    onClose={() => setShowPlayersModal(false)}
+                />
             </View>
         </ImageBackground>
     );
 };
+
 
 const windowWidth = Dimensions.get('window').width;
 
