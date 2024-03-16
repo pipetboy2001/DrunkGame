@@ -50,17 +50,17 @@ const GamesScreen = ({ navigation }) => {
                 </Pressable>
 
                 <View style={[styles.gameContainer, { backgroundColor: '#12375c' }]}>
-                    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego1')}>
-                        <Text style={styles.buttonText}>Tomanji</Text>
+                <Pressable style={[styles.gameButton, { backgroundColor: '#f37121' }]} onPress={() => handleGameSelection('Tomanji')}>
+                        <Text style={[styles.buttonText, { fontSize: 18 }]}>Tomanji 🎲</Text>
                     </Pressable>
-                    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego2')}>
-                        <Text style={styles.buttonText}>¿Que prefiere?</Text>
+                    <Pressable style={[styles.gameButton, { backgroundColor: '#f8961e' }]} onPress={() => handleGameSelection('¿Qué prefiere?')}>
+                        <Text style={[styles.buttonText, { fontSize: 18 }]}>¿Qué prefiere? 🤔</Text>
                     </Pressable>
-                    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego3')} disabled>
-                        <Text style={styles.buttonText}>????</Text>
+                    <Pressable style={[styles.gameButton, styles.disabledButton]} disabled>
+                        <Text style={[styles.buttonText, { fontSize: 18 }]}>????</Text>
                     </Pressable>
-                    <Pressable style={styles.gameButton} onPress={() => handleGameSelection('juego4')} disabled>
-                        <Text style={styles.buttonText}>?????</Text>
+                    <Pressable style={[styles.gameButton, styles.disabledButton]} disabled>
+                        <Text style={[styles.buttonText, { fontSize: 18 }]}>?????</Text>
                     </Pressable>
                 </View>
 
@@ -89,6 +89,8 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: 'cover',
         justifyContent: 'center',
+        width: '100%',
+        height: '100%',
     },
     container: {
         flex: 1,
@@ -176,6 +178,9 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
     },
+    disabledButton:{
+        backgroundColor: '#6c6977',
+    }
 });
 
 export default GamesScreen;

@@ -49,6 +49,10 @@ const PlayersScreen = () => {
         AsyncStorage.setItem('players', JSON.stringify(newPlayers));
     };
 
+    const canAdvance = players.length >= 2;
+    const buttonText = canAdvance ? "¡Jugar!" : `Agregue ${2 - players.length} personas más`;
+
+
     return (
         <ImageBackground source={backgroundImg} style={styles.background}>
             <View style={styles.container}>
@@ -76,8 +80,12 @@ const PlayersScreen = () => {
                             </View>
                         ))}
                     </ScrollView>
-                    <Pressable style={styles.playButton} onPress={goToGamesScreen}>
-                        <Text style={styles.playButtonText}>¡Jugar!</Text>
+                    <Pressable 
+                        style={[styles.playButton, !canAdvance && { opacity: 0.5 }]}
+                        onPress={canAdvance ? goToGamesScreen : undefined} // Evita la acción si no se cumplen las condiciones
+                        disabled={!canAdvance} // Deshabilita el botón si no se cumplen las condiciones
+                    >
+                        <Text style={styles.playButtonText}>{buttonText}</Text>
                     </Pressable>
                 </View>
             </View>
@@ -90,6 +98,8 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: 'cover',
         justifyContent: 'center',
+        width: '100%',
+        height: '100%',
     },
     container: {
         flex: 1,
